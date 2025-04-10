@@ -12,6 +12,6 @@ public class CounselController {
 
     @GetMapping("/test")
     public String test() {
-        return "test!!!!";
+        return "test!!!!1";
     }
 }
