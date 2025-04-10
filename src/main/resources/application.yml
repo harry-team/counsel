@@ -1,0 +1,148 @@
+spring:
+  profiles:
+    active: local # ?? ???? local? ??
+  application:
+    name: counsel-service
+
+  # ?????? ??
+  datasource:
+    url: jdbc:mysql://localhost:3306/counsel_db?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+
+  # JPA ??
+  jpa:
+    hibernate:
+      ddl-auto: update # ?? ????? update, ?? ????? validate ??
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        show_sql: true
+        use_sql_comments: true
+    open-in-view: false
+
+  # Redis ??
+  redis:
+    host: localhost
+    port: 6379
+    password: # ????? ??? ?? ??
+    timeout: 5000
+    lettuce:
+      pool:
+        max-active: 8  # ??? ?? ?? ?? ?
+        max-idle: 8    # ?? ?? ?? ?? ?
+        min-idle: 0    # ?? ?? ?? ?? ?
+        max-wait: -1   # ?? ??? ?? ??? ???? ?? ?? (??: ?? ??)
+
+  # ?? ??
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/plain
+    min-response-size: 1024
+
+# JWT ??
+jwt:
+  secret: your-secret-key-must-be-at-least-256-bits-long-for-security-reasons
+  token-validity-seconds: 3600  # 1??
+  refresh-token-validity-seconds: 86400  # 24??
+
+# ?? ??
+logging:
+  level:
+    root: INFO
+    com.harry.counsel: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.data.redis: DEBUG
+
+# WebSocket ??
+websocket:
+  allowed-origins: "*"  # ?? ?? ????? ???? ??? ?? ??
+  endpoint: /ws
+  destination-prefixes: /app
+  broker-prefixes: /topic, /queue
+
+# ?? ??
+chat:
+  max-inactive-minutes: 30  # ??? ???? ??(?)
+  cleanup-cron: "0 0/10 * * * ?"  # 10??? ?? ?? ??
+
+---
+# ?? ?? ??
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://dev-db:3306/counsel_db?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    username: dev_user
+    password: dev_password
+  redis:
+    host: dev-redis
+    port: 6379
+
+server:
+  port: 8081
+
+---
+# ??? ?? ??
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  redis:
+    host: localhost
+    port: 6379
+
+---
+# ?? ?? ??
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://prod-db:3306/counsel_db?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate  # ?? ????? validate ?? ??
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+
+logging:
+  level:
+    root: WARN
+    com.harry.counsel: INFO
+    org.hibernate: INFO
+    org.springframework: INFO
+
+server:
+  port: ${SERVER_PORT:8080}
