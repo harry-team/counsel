@@ -1,5 +1,6 @@
 package com.harry.counsel.java.config.websocket;
 
+import com.harry.counsel.java.config.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
