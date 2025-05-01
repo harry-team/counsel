@@ -21,7 +21,7 @@ Redis 서버는 Docker를 사용하여 실행
 
 ```bash
 # Redis 컨테이너 실행
-docker run --name redis -p 6379:6379 -d redis
+docker run --name redis -p 6379:6379 -d redis redis-server --requirepass your_secure_password_2025!xAiRedisCounselingService
 
 # 상태 확인
 docker ps
