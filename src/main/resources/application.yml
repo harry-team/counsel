@@ -5,7 +5,7 @@ spring:
     name: counsel-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/counsel_db?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3307/counsel_db?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: root
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -34,7 +34,7 @@ server:
     context-path: /api
 
 jwt:
-  secret: your-secret-key-must-be-at-least-256-bits-long-for-security-reasons
+  secret: 7f8a9b0c1d2e3f4g5h6i7j8k9l0m1n2o3p4q5r6s7t8u9v0w1x2y3z4a5b6c7d8e9f
   token-validity-seconds: 3600 #1시간
   refresh-token-validity-seconds: 86400
 
