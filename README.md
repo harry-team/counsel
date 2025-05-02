@@ -68,7 +68,7 @@ MySQL 데이터베이스 접속정보
 MySQL Workbench, DBeaver, DataGrip 등 DB 접속 도구 설정:
 
 호스트(Host): localhost 또는 127.0.0.1
-포트(Port): 3306
+포트(Port): 3307
 사용자명(Username): root
 비밀번호(Password): password 
 데이터베이스(Database): counsel_db
