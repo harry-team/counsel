@@ -43,7 +43,6 @@ public class AuthController {
         dto.setEmail(user.getEmail());
         dto.setName(user.getName());
         dto.setProvider(user.getProvider());
-        dto.setRole(String.valueOf(user.getRole()));
 
         return ResponseEntity.ok(dto);
     }

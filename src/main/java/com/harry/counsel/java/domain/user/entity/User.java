@@ -2,7 +2,6 @@ package com.harry.counsel.java.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import static com.harry.counsel.java.domain.user.entity.UserRole.*;
 
 @Builder
 @Entity
@@ -28,21 +27,5 @@ public class User {
 
     @Column
     private String socialId;
-
-    @Column(nullable = false)
-    private boolean enabled = true;
-
-    @Column(nullable = false)
-    private boolean accountNonExpired = true;
-
-    @Column(nullable = false)
-    private boolean accountNonLocked = true;
-
-    @Column(nullable = false)
-    private boolean credentialsNonExpired = true;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role = ROLE_USER;
 
 }
