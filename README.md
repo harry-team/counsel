@@ -42,7 +42,7 @@ MySQL 서버는 Docker를 통해 실행
 
 ```bash
 # MySQL 컨테이너 실행
-docker run --name mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=counsel_db -p 3306:3306 -d mysql:8.0
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=counsel_db -p 3307:3306 -d mysql:8.0
 
 # 상태 확인
 docker ps
