@@ -1,7 +1,5 @@
 package com.harry.counsel.java.config.jwt;
 
-import com.harry.counsel.java.domain.user.entity.User;
-import com.harry.counsel.java.domain.user.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.security.Key;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +26,6 @@ public class JwtUtil {
     private final long tokenValidityInSeconds;
     private final long refreshTokenValidityInSeconds;
     private final UserDetailsService userDetailsService;
-    private final UserRepository userRepository;
 
     // JWT 서명을 위한 키 생성
     private Key getSigningKey() {
@@ -87,21 +83,13 @@ public class JwtUtil {
     }
 
     /**
-     * Email로 액세스 토큰 생성
-     */
-    public String generateToken(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + email));
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        return generateToken(userDetails, user.getId());
-    }
-
-    /**
      * UserDetails 객체로부터 토큰 생성
      */
     public String generateToken(UserDetails userDetails, Long userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
+
+        // 사용자 권한 추가
         claims.put("roles", userDetails.getAuthorities());
 
         return generateToken(claims, userDetails.getUsername());
@@ -137,10 +125,13 @@ public class JwtUtil {
      */
     public Boolean validateToken(String token) {
         try {
+            // 토큰 파싱 및 서명 검증
             Jwts.parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token);
+
+            // 토큰 만료 확인
             return !isTokenExpired(token);
         } catch (Exception e) {
             log.error("Invalid JWT token: {}", e.getMessage());
@@ -164,3 +155,4 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }
+
