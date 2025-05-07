@@ -1,4 +1,4 @@
-package com.harry.counsel.java.domain.counsel.entitiy;
+package com.harry.counsel.java.domain.counsel.entity;
 
 import com.harry.counsel.java.domain.user.entity.User;
 import jakarta.persistence.*;

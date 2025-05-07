@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -23,6 +25,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtUtil jwtUtil;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -47,7 +50,17 @@ public class SecurityConfig {
         log.info("successHandler start!!");
         return (request, response, authentication) -> {
             String email = authentication.getName();
-            String jwt = jwtUtil.generateToken(email);
+            // UserDetails 로드
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+            // userId 조회 (임시로 email 해시 사용, 실제로는 DB 조회 필요)
+            // TODO: 실제 애플리케이션에서는 UserRepository를 통해 userId 조회
+            Long userId = (long) email.hashCode(); // 임시 userId, 실제로는 DB에서 가져와야 함
+
+            // JWT 토큰 생성
+            String jwt = jwtUtil.generateToken(userDetails, userId);
+
+            // 리다이렉트
             response.sendRedirect("/api/v1/auth/success?token=" + jwt);
         };
     }

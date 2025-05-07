@@ -38,12 +38,13 @@ public class AuthController {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + email));
 
-        UserResponseDto dto = new UserResponseDto();
-        dto.setId(user.getId());
-        dto.setEmail(user.getEmail());
-        dto.setName(user.getName());
-        dto.setProvider(user.getProvider());
+        UserResponseDto build = UserResponseDto.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .provider(user.getProvider())
+                .id(user.getId())
+                .build();
 
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(build);
     }
 }
